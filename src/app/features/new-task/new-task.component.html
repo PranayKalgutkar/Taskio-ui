@@ -1,0 +1,63 @@
+<div>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Create New Task</mat-card-title>
+      <mat-card-subtitle>Fill the form below to create a task</mat-card-subtitle>
+    </mat-card-header>
+
+    <!-- <mat-divider></mat-divider> -->
+
+    <mat-card-content>
+      <form [formGroup]="newTaskForm" (ngSubmit)="createTask()" fxLayout="column" fxLayoutGap="20px">
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Task Title</mat-label>
+          <input matInput formControlName="title" placeholder="Enter task title">
+          <mat-error *ngIf="newTaskForm.get('title')?.invalid && newTaskForm.get('title')?.touched">
+            Task title is required and should be at least 5 characters long.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" placeholder="Enter task description"></textarea>
+          <mat-error *ngIf="newTaskForm.get('description')?.invalid && newTaskForm.get('description')?.touched">
+            Description is required and should be at least 10 characters long.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Due Date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="dueDate" placeholder="Choose a due date">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="newTaskForm.get('dueDate')?.invalid && newTaskForm.get('dueDate')?.touched">
+            Due date is required.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status">
+            <mat-option value="To Do">To Do</mat-option>
+            <mat-option value="In Progress">In Progress</mat-option>
+            <mat-option value="Completed">Completed</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Assign User</mat-label>
+          <input matInput formControlName="assignedUser" placeholder="Enter assigned user's name">
+          <mat-error *ngIf="newTaskForm.get('assignedUser')?.invalid && newTaskForm.get('assignedUser')?.touched">
+            Assigned user is required.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-card-actions fxLayout="row" fxLayoutAlign="end">
+          <button mat-raised-button color="primary" type="submit" [disabled]="newTaskForm.invalid">
+            Create Task
+          </button>
+        </mat-card-actions>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

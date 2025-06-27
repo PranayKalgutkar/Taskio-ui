@@ -1,0 +1,10 @@
+.container1 {
+    max-width: 100%;
+    background-color: aqua;
+    /* margin: 32px auto; */
+    /* padding: 16px; */
+  }
+  
+  .full-width {
+    width: 100%;
+  }

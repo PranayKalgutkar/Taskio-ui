@@ -1,0 +1,88 @@
+<mat-toolbar class="mat-elevation-z8">
+    <button
+      mat-icon-button
+      *ngIf="sidenav.mode === 'over'"
+      (click)="sidenav.toggle()"
+    >
+      <mat-icon *ngIf="!sidenav.opened"> menu </mat-icon>
+      <mat-icon *ngIf="sidenav.opened"> close </mat-icon>
+    </button>
+    Responsive side navigation
+  </mat-toolbar>
+  
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav="matSidenav" class="mat-elevation-z8">
+      <img
+        class="avatar mat-elevation-z8"
+        src="../assets/daniel.jpg"
+      />
+  
+      <h4 class="name">John Smith</h4>
+      <p class="designation">Software Engineer</p>
+  
+      <mat-divider></mat-divider>
+  
+      <ng-container *ngFor="let item of menuItem">
+        <!-- Menu without sub-items -->
+        <button
+          mat-button
+          class="menu-button"
+          [routerLink]="item.route"
+          *ngIf="!item.subItems"
+          (click)="expandedMenu = undefined"
+          routerLinkActive="active-menu-item" 
+        >
+          <mat-icon>{{ item.icon }}</mat-icon>
+          <span>{{ item.label }}</span>
+        </button>
+      
+        <!-- Menu with sub-items -->
+        <div *ngIf="item.subItems" class="menu-group">
+          <button
+            mat-button
+            class="menu-button"
+            (click)="toggleMenu(item.label)"
+            [ngClass]="{ 'active-menu-item': isSubRouteActive(item.subItems!) }"
+
+          >
+            <mat-icon>{{ item.icon }}</mat-icon>
+            <span>{{ item.label }}</span>
+            <mat-icon class="expand-icon">
+              {{ expandedMenu === item.label ? 'expand_less' : 'expand_more' }}
+            </mat-icon>
+          </button>
+      
+          <!-- Submenu -->
+          <div
+            *ngIf="expandedMenu === item.label"
+            class="submenu" @expandContractMenu
+          >
+            <button
+              mat-button
+              class="submenu-button"
+              *ngFor="let sub of item.subItems"
+              [routerLink]="sub.route"
+              routerLinkActive="active-submenu-item"
+              [routerLinkActiveOptions]="{ exact: true }"
+            >
+              <mat-icon>{{ sub.icon }}</mat-icon>
+              <span>{{ sub.label }}</span>
+            </button>
+          </div>
+        </div>
+      </ng-container>
+        
+      <mat-divider></mat-divider>
+
+      <button mat-button class="menu-button" routerLink="/profile">
+        <mat-icon>logout</mat-icon>
+        <span>Log Out</span>
+      </button>
+
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div class="content mat-elevation-z8">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
