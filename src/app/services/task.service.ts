@@ -16,8 +16,9 @@ export class TaskService extends BaseService {
       .pipe(
         map(response => {
           try {
-            const parsedResult = JSON.parse(response);
-            return parsedResult;
+            //const parsedResult = JSON.parse(response);
+            //return parsedResult;
+            return response;
           } catch (error) {
             console.error('Error parsing JSON:', error);
             throw error;
@@ -26,13 +27,14 @@ export class TaskService extends BaseService {
       );
   }
 
-  fetchTaskAll(): Observable<any> {
+  fetchTasks(): Observable<any> {
     return this.httpGetService(ApiPath.ALL_TASKS, JsonHeaders, undefined, ResponseType.JSON)
       .pipe(
         map(response => {
           try {
-            const parsedResult = JSON.parse(response);
-            return parsedResult;
+            //const parsedResult = JSON.parse(response);
+            //return parsedResult;
+            return response;
           } catch (error) {
             console.error('Error parsing JSON:', error);
             throw error;
@@ -40,4 +42,13 @@ export class TaskService extends BaseService {
         })
       );
   }
+
+  fetchTaskAll(filter: any): Observable<any> {
+  return this.httpPostService(ApiPath.ALL_TASKS, filter, JsonHeaders)
+    .pipe(
+      map(response => {
+        return typeof response === 'string' ? JSON.parse(response) : response;
+      })
+    );
+}
 }

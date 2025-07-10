@@ -5,5 +5,5 @@ import { environment } from '../../../environments/environment';
 
 export const ApiPath = {
     CREATE_TASK: `${environment.apiBaseUrl}/newtasks`,
-    ALL_TASKS: `${environment.apiBaseUrl}/tasks`
+    ALL_TASKS: `${environment.apiBaseUrl}/task/fetch-tasks`
   };
