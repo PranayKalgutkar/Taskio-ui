@@ -47,6 +47,7 @@ export class TaskService extends BaseService {
   return this.httpPostService(ApiPath.ALL_TASKS, filter, JsonHeaders)
     .pipe(
       map(response => {
+        console.log("task service response", response);
         return typeof response === 'string' ? JSON.parse(response) : response;
       })
     );

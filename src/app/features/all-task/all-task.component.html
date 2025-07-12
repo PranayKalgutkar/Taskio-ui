@@ -2,7 +2,8 @@
 <div class="container">
   <div class="table-container">
 
-    <table mat-table [dataSource]="dataSource" matSort matSortActive="dueDate" matSortDisableClear matSortDirection="asc" class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort matSortActive="dueDate" matSortDisableClear matSortDirection="asc" 
+    class="mat-elevation-z8" style="table-layout: fixed; width: 100%;">
 
       <ng-container matColumnDef="title">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
@@ -38,7 +39,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 
-    <mat-paginator [length]="totalData" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    <mat-paginator [length]="totalData" [pageSize]="5" [pageSizeOptions]="[5, 10]" showFirstLastButtons></mat-paginator>
 
   </div>
 </div>

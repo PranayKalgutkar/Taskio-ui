@@ -10,38 +10,43 @@ import { UserTask } from '../../shared/models/UserTask';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { merge, startWith, switchMap, map, catchError, of } from 'rxjs';
+import { merge, startWith, switchMap, map, catchError, of, delay, tap } from 'rxjs';
 
 @Component({
   selector: 'app-all-task',
   templateUrl: './all-task.component.html',
   styleUrls: ['./all-task.component.css']
 })
-export class AllTaskComponent implements OnInit, AfterViewInit {
+export class AllTaskComponent implements OnInit {
 
   displayedColumns: string[] = ['title', 'description', 'dueDate', 'status', 'assignedUser', 'createdBy'];
   dataSource = new MatTableDataSource<UserTask>();
+  userTasks: UserTask[] = [];
+
   totalData: number = 0;
   loading = false;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort!: MatSort;
+
 
   constructor(
     private taskService: TaskService,
     private cdr: ChangeDetectorRef
   ) { }
 
-
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   ngAfterViewInit(): void {
     this.loadTasks();
-    this.cdr.detectChanges();
+    //this.setRecordToMatTable();
+    //this.cdr.detectChanges();
   }
 
   loadTasks(): void {
-    this.dataSource.paginator = this.paginator;
+    // Set paginator and sort to dataSource (optional in this case, since we control data ourselves)
+    //this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
 
     // Reset to first page on sort change
@@ -52,25 +57,37 @@ export class AllTaskComponent implements OnInit, AfterViewInit {
         startWith({}),
         switchMap(() => {
           this.loading = true;
-          return this.taskService.fetchTaskAll({
+
+          const postData = {
             pageNumber: this.paginator.pageIndex + 1,
             pageSize: this.paginator.pageSize,
             sortBy: this.sort.active,
             sortDirection: this.sort.direction
-          });
+          };
+
+          return this.taskService.fetchTaskAll(postData).pipe(
+            delay(300), // simulate loading
+            catchError(err => {
+              this.loading = false;
+              console.error('Fetch error:', err);
+              return of({ data: { items: [], totalCount: 0 } });
+            })
+          );
+        }),
+        tap(response => {
+          console.log('Response:', response);
         }),
         map((response) => {
           this.loading = false;
-          this.totalData = response.totalCount || 0;
-          return response.data;
-        }),
-        catchError(() => {
-          this.loading = false;
-          return of([]);
+
+          const items = response?.data?.items ?? [];
+          const totalCount = response?.data?.totalCount ?? 0;
+          this.totalData = totalCount;
+          return items;
         })
       )
       .subscribe((data: UserTask[]) => {
-        this.dataSource.data = data;
+        this.dataSource.data = data; // ✅ Do NOT recreate dataSource!
       });
   }
 }

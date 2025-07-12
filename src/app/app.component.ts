@@ -31,6 +31,8 @@ export class AppComponent {
   @ViewChild(MatSidenav)
   sidenav!: MatSidenav;
 
+  isOverMode = false;
+
   constructor(private observer: BreakpointObserver, private router: Router) { }
 
   expandedMenu: string | undefined;
@@ -86,37 +88,27 @@ export class AppComponent {
   ];
 
   ngAfterViewInit() {
-    this.observer
-      .observe(['(max-width: 800px)'])
-      //.pipe(delay(1), untilDestroyed(this))
-      .subscribe((res) => {
-        if (res.matches) {
-          this.sidenav.mode = 'over';
-          this.sidenav.close();
-        } else {
-          this.sidenav.mode = 'side';
-          this.sidenav.open();
-        }
-      });
+    setTimeout(() => {
+      this.observer
+        .observe(['(max-width: 800px)'])
+        .subscribe((res) => {
+          this.isOverMode = res.matches;
+          this.sidenav.mode = this.isOverMode ? 'over' : 'side';
 
-    // Expand the correct parent menu if a subroute is active
-    const activeParent = this.menuItem.find(item =>
-      item.subItems?.some(sub => this.router.url.includes(sub.route!))
-    );
+          if (this.isOverMode) {
+            this.sidenav.close();
+          } else {
+            this.sidenav.open();
+          }
+        });
 
-    if (activeParent) {
-      this.expandedMenu = activeParent.label;
-    }
-
-    // this.router.events
-    //   .pipe(
-    //     untilDestroyed(this),
-    //     filter((e) => e instanceof NavigationEnd)
-    //   )
-    //   .subscribe(() => {
-    //     if (this.sidenav.mode === 'over') {
-    //       this.sidenav.close();
-    //     }
-    //   });
+      // Expand correct menu item if needed
+      const activeParent = this.menuItem.find(item =>
+        item.subItems?.some(sub => this.router.url.includes(sub.route!))
+      );
+      if (activeParent) {
+        this.expandedMenu = activeParent.label;
+      }
+    });
   }
 }
