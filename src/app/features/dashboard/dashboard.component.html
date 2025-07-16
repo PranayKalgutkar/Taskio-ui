@@ -1,1 +1,11 @@
-<p>dashboard works!</p>
+<gridster [options]="options">
+  <gridster-item *ngFor="let widget of widgets" [item]="widget">
+    <div class="widget-box">
+      <p>{{ widget.type }}</p>
+    </div>
+  </gridster-item>
+</gridster>
+
+<button (click)="addWidget()">Add Widget</button>
+
+
