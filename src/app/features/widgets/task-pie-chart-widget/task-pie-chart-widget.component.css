@@ -1,0 +1,16 @@
+.pie-widget {
+  width: 100%;
+  height: 100%;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pie-widget canvas {
+  max-width: 180px;     /* 👈 Limit chart size */
+  max-height: 180px;
+  width: 100% !important;
+  height: auto !important;
+}
+

@@ -4,7 +4,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CommonModule } from '@angular/common';
+
 import { GridsterModule } from 'angular-gridster2';
+import { NgChartsModule } from 'ng2-charts';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
@@ -28,7 +31,9 @@ import { AppComponent } from './app.component';
 import { NewTaskComponent } from './features/new-task/new-task.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { SettingsComponent } from './features/settings/settings.component';
-import { AllTaskComponent } from './features/all-task/all-task.component'; // <-- Add this line
+import { AllTaskComponent } from './features/all-task/all-task.component';
+import { TaskWidgetComponent } from "./features/widgets/task-widget/task-widget.component"; // <-- Add this line
+import { TaskPieChartWidgetComponent } from './features/widgets/task-pie-chart-widget/task-pie-chart-widget.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +41,8 @@ import { AllTaskComponent } from './features/all-task/all-task.component'; // <-
     NewTaskComponent,
     DashboardComponent,
     SettingsComponent,
-    AllTaskComponent
+    AllTaskComponent,
+    TaskPieChartWidgetComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +51,11 @@ import { AllTaskComponent } from './features/all-task/all-task.component'; // <-
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    CommonModule,
+    
     GridsterModule,
+    NgChartsModule,
+    
     MatCardModule,
     MatInputModule,
     MatButtonModule,
@@ -62,8 +72,9 @@ import { AllTaskComponent } from './features/all-task/all-task.component'; // <-
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    MatProgressSpinnerModule
-  ],
+    MatProgressSpinnerModule,
+    TaskWidgetComponent
+],
   providers: [],
   bootstrap: [AppComponent]
 })

@@ -1,11 +1,38 @@
-<gridster [options]="options">
-  <gridster-item *ngFor="let widget of widgets" [item]="widget">
-    <div class="widget-box">
-      <p>{{ widget.type }}</p>
+<div class="dashboard-header">
+    <button (click)="isEditMode = false" [disabled]="!isEditMode">View</button>
+    <button (click)="toggleEditMode()" [disabled]="isEditMode">Edit</button>
+
+    <div class="widget-menu">
+        <button (click)="toggleWidgetMenu()">Widgets ⬇</button>
+        <ul *ngIf="showWidgetMenu" class="widget-dropdown">
+            <li (click)="addWidget('pie')">📊 Task Pie Chart</li>
+            <li (click)="addWidget('task')">🕓 Top In-Progress Tasks</li>
+            <li (click)="addWidget('calendar')">📅 Calendar</li>
+        </ul>
     </div>
-  </gridster-item>
+</div>
+
+
+<gridster [options]="options">
+    <gridster-item *ngFor="let widget of widgets" [item]="widget">
+        <div class="widget-box" [class.flipped]="widget.flipped">
+            <div class="flip-inner">
+                
+                <div class="front">
+                    <ng-container [ngSwitch]="widget.type">
+                        <app-task-widget *ngSwitchCase="'task'" [tasks]="getTopInProgressTasks()"></app-task-widget>
+                        <app-task-pie-chart-widget *ngSwitchCase="'pie'" [tasks]="taskList"></app-task-pie-chart-widget>
+                        
+                        <p *ngSwitchDefault>{{ widget.type }}</p>
+                    </ng-container>
+                    <button *ngIf="isEditMode" class="gear-button" (click)="widget.flipped = true">⚙️</button>
+                </div>
+
+                <div class="back" *ngIf="widget.flipped">
+                    <button (click)="removeWidget(widget)">Remove</button>
+                    <button (click)="widget.flipped = false">Back</button>
+                </div>
+            </div>
+        </div>
+    </gridster-item>
 </gridster>
-
-<button (click)="addWidget()">Add Widget</button>
-
-
