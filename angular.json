@@ -65,10 +65,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "TaskTrackerApp:build:production"
+              "buildTarget": "TaskTrackerApp:build:production"
             },
             "development": {
-              "browserTarget": "TaskTrackerApp:build:development"
+              "buildTarget": "TaskTrackerApp:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -76,7 +76,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "TaskTrackerApp:build"
+            "buildTarget": "TaskTrackerApp:build"
           }
         },
         "test": {
